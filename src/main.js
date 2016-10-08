@@ -1,25 +1,23 @@
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
-import store from './vuex/store'
-import VueRouter from 'vue-router'
 import App from './App'
-import Main from './components/Main'
-import Test from './components/Test'
-import TableExample from './components/Examples/FTable'
+import router from './router/index'
+import store from './store/index'
+
+import 'font-awesome/css/font-awesome.min.css'
+import 'bootstrap/dist/css/bootstrap-theme.min.css'
+import 'bootswatch/paper/bootstrap.min.css'
+
+sync(store, router)
 
 /* eslint-disable no-new */
-Vue.use(VueRouter)
-let router = new VueRouter()
-sync(store, router)
-router.map({
-  '/': {
-    component: Main
-  },
-  '/test': {
-    component: Test
-  },
-  '/table': {
-    component: TableExample
-  }
+const app = new Vue({
+  router,
+  store,
+  el: '#app',
+  render: h => h(App)
 })
-router.start(App, 'html')
+
+export default app

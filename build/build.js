@@ -1,6 +1,5 @@
 // https://github.com/shelljs/shelljs
 require('shelljs/global')
-require('./build-examples')
 env.NODE_ENV = 'production'
 
 var path = require('path')
@@ -21,7 +20,7 @@ spinner.start()
 var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
 rm('-rf', assetsPath)
 mkdir('-p', assetsPath)
-cp('-R', 'static/', assetsPath)
+cp('-R', 'static/*', assetsPath)
 
 webpack(webpackConfig, function (err, stats) {
   spinner.stop()

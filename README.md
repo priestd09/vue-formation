@@ -1,62 +1,27 @@
 # vue-formation
-A Bootstrap themeable Vue.js form builder
 
-*Note: This project is still under initial development and provides limited support/documentation*
+> A Vue.js layout builder
 
-[`Project Page`](https://bhoriuchi.github.io/vue-formation/)
+## Build Setup
 
-### Bootstrap
-Formation relies on [Bootstrap.css](http://getbootstrap.com/) for styling and it must be included in your project for formation to work properly. You may also use bootstrap themes like [Bootswatch](https://bootswatch.com/)
+``` bash
+# install dependencies
+npm install
 
+# serve with hot reload at localhost:8080
+npm run dev
 
-### Example
+# build for production with minification
+npm run build
 
-```js
-import { Formation } from 'vue-formation'
-import 'bootstrap.css'
-import 'bootstrap-theme.css' // optional
+# run unit tests
+npm run unit
 
-new Vue({
-  el: '#app',
-  components: { Formation },
-  template: '<formation :data.sync="formData" :config="formConfig"></formation>',
-  data: {
-    formData: {
-      firstName: '',
-      lastName: ''
-    },
-    formConfig: {
-      rows: [
-        {
-          columns: [
-            {
-              type: 'text',
-              label: 'First Name',
-              model: 'firstName'
-            },
-            {
-              type: 'text',
-              label: 'Last Name',
-              model: 'lastName'
-            }
-          ]
-        },
-        {
-          columns: [
-            {
-              type: 'button',
-              text: 'OK',
-              class: 'btn-primary',
-              iconClass: 'glyphicon glyphicon-ok',
-              onClick (event, vm) {
-                vm.validate()
-                console.log(vm.data)
-              }
-            }
-          ]
-        }
-      ]
-    }
-  }
-})
+# run e2e tests
+npm run e2e
+
+# run all tests
+npm test
 ```
+
+For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
