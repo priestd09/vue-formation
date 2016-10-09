@@ -7,7 +7,10 @@
 </template>
 
 <script type="text/babel">
+  // import Vue from 'vue'
+  import _ from 'lodash'
   import Formation from './formation/index'
+  import { vueSet } from '../common/util'
   export default {
     components: {
       Formation
@@ -15,29 +18,45 @@
     methods: {
       addForm () {
         this.counter++
-        this.formConfig.forms.push({
+        vueSet(this.formConfig.forms, `form${this.counter}`, {
           type: 'input',
           model: `loc.fdata${this.counter}`
         })
       },
       delForm () {
-        this.formConfig.forms.pop()
+        /*
+        let key = _.last(_.keys(this.formConfig.forms))
+        Vue.set(this.formConfig.forms, key, undefined)
+        delete this.formConfig.forms[key]
+        */
+        // clear and reconfig forms, otherwise forms withthe same name will remain
+        this.formConfig.forms = {}
+        this.$nextTick(() => {
+          this.formConfig.forms = _.cloneDeep(this.formConfig2.forms)
+        })
       }
     },
     data () {
       return {
-        counter: 1,
+        counter: 2,
         formData: {
           name: 'Jon',
           loc: {
-            id: 1
+            id: 2
           }
         },
         formConfig: {
-          forms: [
-            { type: 'input', model: 'loc.id' },
-            { type: 'input', model: 'loc["name"]' }
-          ]
+          forms: {
+            form1: { type: 'input', model: 'loc.id' },
+            form2: { type: 'input', model: 'loc["name"]' }
+          }
+        },
+        formConfig2: {
+          forms: {
+            form1: { type: 'input', model: 'loc.id' },
+            form2: { type: 'input', model: 'loc["name"]' },
+            form3: { type: 'input', model: 'loc["age"]' }
+          }
         }
       }
     }

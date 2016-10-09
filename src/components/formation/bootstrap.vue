@@ -1,7 +1,7 @@
 <template lang="jade">
   div
-    div(v-for="form in config.forms")
-      input(v-model="formData[form.model]")
+    div(v-for="form in forms")
+      input(v-if="validForm(form)", v-model="formData[form.model]")
 </template>
 
 <script type="text/babel">
@@ -18,12 +18,18 @@
       }
     },
     computed: {},
-    data () {
-      return {
-        formData: {}
+    methods: {
+      validForm (form) {
+        return form && form.model && form.name
       }
     },
-    created () {
+    data () {
+      return {
+        formData: {},
+        forms: []
+      }
+    },
+    mounted () {
       syncModelProps.call(this)
     },
     watch: {

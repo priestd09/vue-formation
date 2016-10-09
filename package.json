@@ -13,12 +13,11 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "vue": "^2.0.1"
+    "lodash": "^4.16.3"
   },
   "devDependencies": {
     "bootstrap": "^3.3.7",
     "bootswatch": "^3.3.7",
-    "lodash": "^4.16.3",
     "font-awesome": "^4.6.3",
     "vue-router": "^2.0.0",
     "vuex": "^2.0.0",
@@ -72,6 +71,7 @@
     "ora": "^0.3.0",
     "shelljs": "^0.7.4",
     "url-loader": "^0.5.7",
+    "vue": "^2.0.1",
     "vue-loader": "^9.4.0",
     "vue-style-loader": "^1.0.0",
     "webpack": "^1.13.2",
