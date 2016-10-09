@@ -1,35 +1,38 @@
 <template lang="jade">
   div
     div(v-for="form in config.forms")
-      input(v-model="self[`__formdata_${form.model}`]")
+      input(v-model="formData[form.model]")
 </template>
 
 <script type="text/babel">
-  import _ from 'lodash'
-  import { vueSet } from '../../common/util'
-  let config = {
-    props: ['value', 'config'],
+  import { syncModelProps } from './common'
+  export default {
+    props: {
+      value: {
+        type: Object,
+        required: true
+      },
+      config: {
+        type: Object,
+        required: true
+      }
+    },
     computed: {},
     data () {
       return {
-        self: this
+        formData: {}
       }
     },
     created () {
-      console.log(this)
+      syncModelProps.call(this)
     },
-    beforeCreate () {
-      _.forEach(this.$options.propsData.config.forms, (form) => {
-        config.computed[`__formdata_${form.model}`] = {
-          get () {
-            return _.get(this.value, form.model)
-          },
-          set (v) {
-            vueSet(this.value, form.model, v)
-          }
-        }
-      })
+    watch: {
+      config: {
+        handler () {
+          syncModelProps.call(this)
+        },
+        deep: true
+      }
     }
   }
-  export default config
 </script>

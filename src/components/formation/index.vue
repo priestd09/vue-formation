@@ -15,19 +15,20 @@
       FormationMaterial
     },
     props: {
-      value: Object,
-      config: Object,
+      value: {
+        type: Object,
+        required: true
+      },
+      config: {
+        type: Object,
+        required: true
+      },
       framework: {
         type: String,
         default: 'bootstrap',
         validator (value) {
           return _.includes(['bootstrap', 'material'], value)
         }
-      }
-    },
-    created () {
-      this.value._get = (path) => {
-        return _.get(this.value, path)
       }
     }
   }
