@@ -1,6 +1,6 @@
 <template lang="jade">
   div
-    formation(v-model="formData")
+    formation(v-model="formData", :config='formConfig')
     pre {{formData}}
 </template>
 
@@ -18,7 +18,12 @@
             id: 1
           }
         },
-        msg: 'Hello Vue!'
+        formConfig: {
+          forms: [
+            { type: 'input', model: 'loc["id"]' },
+            { type: 'input', model: 'loc["name"]' }
+          ]
+        }
       }
     }
   }

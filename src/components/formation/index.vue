@@ -1,7 +1,7 @@
 <template lang="jade">
   div
-    formation-bootstrap(v-if="framework === 'bootstrap'", v-model='value')
-    formation-material(v-if="framework === 'material'", v-model='value')
+    formation-bootstrap(v-if="framework === 'bootstrap'", v-model='value', :config='config')
+    formation-material(v-if="framework === 'material'", v-model='value', :config='config')
 </template>
 
 <script type="text/babel">
@@ -16,6 +16,7 @@
     },
     props: {
       value: Object,
+      config: Object,
       framework: {
         type: String,
         default: 'bootstrap',
