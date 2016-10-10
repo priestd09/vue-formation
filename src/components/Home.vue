@@ -53,7 +53,7 @@
           layout: {
             container: {
               button: {
-                class: ['btn-primary', 'fa', 'fa-check'],
+                class: ['btn-primary'],
                 text: 'HI',
                 onclick (e) {
                   console.log('clicked', e)
