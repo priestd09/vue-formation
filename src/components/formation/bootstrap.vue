@@ -1,12 +1,16 @@
 <template lang="jade">
   div
-    div(v-for="form in forms")
-      input(v-if="validForm(form)", v-model="formData[form.model]")
+    div(v-for="(cfg, type) in config.layout")
+      f-container(v-if="type === 'container'", :config="cfg")
 </template>
 
 <script type="text/babel">
   import { syncModelProps } from './common'
+  import FContainer from '../container/index'
   export default {
+    components: {
+      FContainer
+    },
     props: {
       value: {
         type: Object,

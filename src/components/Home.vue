@@ -49,6 +49,17 @@
           forms: {
             form1: { type: 'input', model: 'loc.id' },
             form2: { type: 'input', model: 'loc["name"]' }
+          },
+          layout: {
+            container: {
+              button: {
+                class: ['btn-primary', 'fa', 'fa-check'],
+                text: 'HI',
+                onclick (e) {
+                  console.log('clicked', e)
+                }
+              }
+            }
           }
         },
         formConfig2: {
