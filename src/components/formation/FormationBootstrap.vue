@@ -1,16 +1,9 @@
-<template lang="jade">
-  div
-    div(v-for="(cfg, type) in config.layout")
-      f-container(v-if="type === 'container'", :config="cfg")
-</template>
-
 <script type="text/babel">
+  import _ from 'lodash'
+  import Bootstrap from './bootstrap/index'
   import { syncModelProps } from './common'
-  import FContainer from '../container/index'
+
   export default {
-    components: {
-      FContainer
-    },
     props: {
       value: {
         type: Object,
@@ -25,6 +18,9 @@
     methods: {
       validForm (form) {
         return form && form.model && form.name
+      },
+      capitalize (val) {
+        return _.capitalize(val)
       }
     },
     data () {
@@ -43,6 +39,13 @@
         },
         deep: true
       }
+    },
+    render (createElement) {
+      return createElement('div', {
+        class: {
+          'formation-bootstrap': true
+        }
+      }, _.map(this.config.layout, (cfg, type) => Bootstrap[type](cfg, createElement)))
     }
   }
 </script>
