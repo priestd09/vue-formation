@@ -4,6 +4,10 @@ export const CHILD_TYPES = {
   bootstrap: {
     button: 'button',
     container: 'container'
+  },
+  materialize: {
+    button: 'button',
+    container: 'container'
   }
 }
 
@@ -36,13 +40,13 @@ export function bootstrapConfig (config) {
   return splitConfig('bootstrap', config)
 }
 
-export function materialConfig (config) {
-  return splitConfig('material', config)
+export function materializeConfig (config) {
+  return splitConfig('materialize', config)
 }
 
 export default {
   splitConfig,
   bootstrapConfig,
-  materialConfig,
+  materializeConfig,
   mergeClassObj
 }

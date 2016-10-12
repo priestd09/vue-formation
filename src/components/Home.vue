@@ -1,6 +1,6 @@
 <template lang="jade">
   div
-    formation(v-model="formData", :config='formConfig')
+    formation(v-model="formData", :config='formConfig', framework='materialize')
     button.btn.btn-primary.fa.fa-plus(@click='addForm')
     button.btn.btn-danger.fa.fa-minus(@click='delForm')
     pre {{formData}}
