@@ -6,11 +6,7 @@ export default function container (component, createElement) {
     Framework,
     component,
     tag: 'div',
-    defaults: {
-      class: {
-        container: true
-      }
-    },
+    defaults: {},
     createElement
   })
 }

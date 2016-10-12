@@ -1,6 +1,61 @@
 import _ from 'lodash'
 import { vueSet } from '../../common/util'
 
+export const CHILD_TYPES = {
+  button: 'button',
+  container: 'div',
+  div: 'div',
+  ftable: 'ftable'
+}
+
+export function mergeClassObj (c, def = {}) {
+  let obj = {}
+  if (!_.isString(c) || !_.isObject(c) || !_.isArray(c)) c = {}
+  c = _.isString(c) ? c.split(/\s+/) : c
+
+  if (_.isArray(c)) {
+    _.forEach(c, (name) => {
+      obj[name] = true
+    })
+  } else {
+    obj = c
+  }
+  return _.merge({}, def, obj)
+}
+
+export function splitConfig (config) {
+  let types = _.mapValues(CHILD_TYPES)
+  let out = { components: {}, settings: {} }
+  _.forEach(config, (v, k) => {
+    if (_.includes(types, k)) out.components[k] = v
+    else out.settings[k] = v
+  })
+  return out
+}
+
+export function createVueElement (args) {
+  let { Framework, createElement, component, tag, defaults } = args
+  let components = _.get(component, 'components', [])
+  let config = _.get(component, 'config', {})
+  let hasComponents = components.length > 0
+
+  let data = { class: mergeClassObj(config.class, _.get(defaults, 'class', {})) }
+  if (config.style) data.style = config.style
+  if (config.content) _.set(data, 'domProps.innerHTML', config.content)
+  if (config.html) _.set(data, 'domProps.innerHTML', config.html)
+  if (_.isObject(config.attrs)) data.attrs = config.attrs
+  if (_.isFunction(config.onclick)) _.set(data, 'on.click', config.onclick)
+
+  return createElement(
+    CHILD_TYPES[tag],
+    data,
+    hasComponents ? _.without(_.map(components, (c) => {
+      let cmp = Framework[c.type]
+      return _.isFunction(cmp) ? cmp(c, createElement) : createElement(cmp)
+    }), undefined) : undefined
+  )
+}
+
 export function syncModelProps () {
   let forms = _.get(this.config, 'forms')
   let models = _.without(_.map(forms, 'model'), undefined)
@@ -35,5 +90,8 @@ export function syncModelProps () {
 }
 
 export default {
-  syncModelProps
+  syncModelProps,
+  mergeClassObj,
+  splitConfig,
+  createVueElement
 }

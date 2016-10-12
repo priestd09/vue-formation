@@ -7,7 +7,7 @@ import router from './router/index'
 import store from './store/index'
 
 import 'font-awesome/css/font-awesome.min.css'
-import 'materialize-css/dist/css/materialize.min.css'
+// import 'materialize-css/dist/css/materialize.min.css'
 // import 'bootstrap/dist/css/bootstrap.min.css'
 // import 'bootswatch/paper/bootstrap.min.css'
 
