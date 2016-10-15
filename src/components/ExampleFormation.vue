@@ -50,24 +50,38 @@
         formData: {
           name: 'Jon',
           loc: {
-            id: 2
+            id: '2'
           }
         },
         formConfig: {
-          forms: {
-            form1: { type: 'input', model: 'loc.id' },
-            form2: { type: 'input', model: 'loc["name"]' }
-          },
           components: [
             {
               type: 'formgrid',
-              config: {},
+              config: {
+                decorateRequired: false
+              },
               rows: [
                 {
                   columns: [
                     {
-                      type: 'input',
-                      label: 'input1'
+                      type: 'text',
+                      label: 'input1',
+                      colspan: 2,
+                      model: 'loc.id',
+                      required: true,
+                      onkeyup (event, value, data) {
+                        console.log(event, value, data)
+                      }
+                    },
+                    {
+                      type: 'text',
+                      label: 'input2',
+                      model: 'loc.name'
+                    },
+                    {
+                      type: 'password',
+                      label: 'password',
+                      model: 'password'
                     }
                   ]
                 }

@@ -2,7 +2,7 @@
   import _ from 'lodash'
   import Bootstrap from './bootstrap/index'
   import Materialize from './materialize/index'
-  import { syncModelProps } from './common'
+  import { vueSet } from '../../common/util'
 
   export default {
     props: {
@@ -29,6 +29,35 @@
       },
       capitalize (val) {
         return _.capitalize(val)
+      },
+      findModels (obj, models = []) {
+        if (obj.model) models.push(obj.model)
+        if (_.isArray(_.get(obj, 'components'))) {
+          _.forEach(obj.components, (c) => {
+            this.findModels(c, models)
+          })
+        }
+        if (_.isArray(_.get(obj, 'rows'))) {
+          _.forEach(obj.rows, (row) => {
+            if (_.isArray(_.get(row, 'columns'))) {
+              _.forEach(row.columns, (col) => {
+                if (col.model) models.push(col.model)
+              })
+            }
+          })
+        }
+        return models
+      },
+      syncModelProps () {
+        _.forEach(_.uniq(this.findModels(this.config)), (model) => {
+          if (!_.has(this.formData, model)) {
+            Object.defineProperty(this.formData, model, {
+              configurable: true,
+              get: () => _.get(this.value, model),
+              set: (v) => vueSet(this.value, model, v)
+            })
+          }
+        })
       }
     },
     data () {
@@ -37,26 +66,23 @@
           bootstrap: Bootstrap,
           materialize: Materialize
         },
-        formData: {},
-        forms: []
+        formData: {}
       }
-    },
-    mounted () {
-      syncModelProps.call(this)
     },
     watch: {
       config: {
         handler () {
-          syncModelProps.call(this)
+          this.syncModelProps()
         },
         deep: true
       }
     },
     render (createElement) {
       let Framework = this.frameworks[this.framework]
+      this.syncModelProps()
       return createElement('div', {
         class: {
-          'formation': true
+          formation: true
         }
       }, _.without(_.map(this.config.components, (component) => {
         let cmp = Framework[component.type]
@@ -64,12 +90,11 @@
         let data = {}
         switch (component.type) {
           case 'formgrid':
-            data.props = { value: this.value, config: component }
+            data.props = { value: this.formData, config: component, data: this.value }
             break
           default:
             break
         }
-
         return createElement(cmp, data)
       }), undefined))
     }
