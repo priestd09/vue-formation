@@ -60,6 +60,20 @@
           },
           components: [
             {
+              type: 'formgrid',
+              config: {},
+              rows: [
+                {
+                  columns: [
+                    {
+                      type: 'input',
+                      label: 'input1'
+                    }
+                  ]
+                }
+              ]
+            },
+            {
               type: 'container',
               config: {},
               components: [
@@ -83,18 +97,7 @@
                 }
               ]
             }
-          ],
-          layout: {
-            container: {
-              button: {
-                class: ['btn-primary'],
-                content: '<i>HI</i>',
-                onclick (e) {
-                  console.log('clicked', e)
-                }
-              }
-            }
-          }
+          ]
         },
         formConfig2: {
           forms: {

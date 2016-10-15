@@ -60,7 +60,17 @@
         }
       }, _.without(_.map(this.config.components, (component) => {
         let cmp = Framework[component.type]
-        return _.isFunction(cmp) ? cmp(component, createElement) : createElement(cmp)
+        if (_.isFunction(cmp)) return cmp(component, createElement)
+        let data = {}
+        switch (component.type) {
+          case 'formgrid':
+            data.props = { value: this.value, config: component }
+            break
+          default:
+            break
+        }
+
+        return createElement(cmp, data)
       }), undefined))
     }
   }

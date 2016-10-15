@@ -51,7 +51,8 @@ export function createVueElement (args) {
     data,
     hasComponents ? _.without(_.map(components, (c) => {
       let cmp = Framework[c.type]
-      return _.isFunction(cmp) ? cmp(c, createElement) : createElement(cmp)
+      if (_.isFunction(cmp)) return cmp(c, createElement)
+      return createElement(cmp)
     }), undefined) : undefined
   )
 }
