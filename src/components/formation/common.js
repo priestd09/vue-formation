@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import { vueSet } from '../../common/util'
+
+export const TEXT_TYPES = ['input', 'text', 'email', 'password', 'number', 'search', 'url', 'tel']
 
 export const CHILD_TYPES = {
   button: 'button',
@@ -21,16 +22,6 @@ export function mergeClassObj (c, def = {}) {
     obj = c
   }
   return _.merge({}, def, obj)
-}
-
-export function splitConfig (config) {
-  let types = _.mapValues(CHILD_TYPES)
-  let out = { components: {}, settings: {} }
-  _.forEach(config, (v, k) => {
-    if (_.includes(types, k)) out.components[k] = v
-    else out.settings[k] = v
-  })
-  return out
 }
 
 export function createVueElement (args) {
@@ -57,42 +48,45 @@ export function createVueElement (args) {
   )
 }
 
-export function syncModelProps () {
-  let forms = _.get(this.config, 'forms')
-  let models = _.without(_.map(forms, 'model'), undefined)
-
-  // remove properties that have no model map
-  _.forEach(Object.getOwnPropertyNames(this.formData), (prop) => {
-    if (!_.includes(models, prop) && prop !== '__ob__') {
-      let idx = _.indexOf(this.forms, _.find(this.forms, { model: prop }))
-      if (!isNaN(idx)) this.forms.splice(idx, 1)
-      vueSet(this.value, prop, undefined)
-      _.unset(this.value, prop)
+export function colWidths (columns, COL_LIMIT = 12) {
+  let filledFirst = false
+  let unset = 0
+  let runningCount = 0
+  let widths = _.map(columns, (col, idx) => {
+    let remaining = (columns.length - (idx + 1))
+    if (_.isNumber(col.colspan)) {
+      let currentWidth = ((col.colspan + runningCount + remaining) > COL_LIMIT) ? 1 : col.colspan
+      runningCount += currentWidth
+      return currentWidth
     }
+    unset++
+    return 0
   })
 
-  // clear the form mapper
-  if (_.without(Object.getOwnPropertyNames(this.formData), '__ob__').length) vueSet(this, 'formData', {})
-
-  // loop through each form and if it has a model add it to the forms array
-  _.forEach(forms, (form, name) => {
-    if (form && form.model) {
-      let hasModel = _.find(this.forms, { model: form.model })
-      if (!hasModel) this.forms.push(_.merge({ name }, form))
-      if (!_.has(this.formData, form.model)) {
-        Object.defineProperty(this.formData, form.model, {
-          configurable: true,
-          get: () => _.get(this.value, form.model),
-          set: (v) => vueSet(this.value, form.model, v)
-        })
+  if (unset) {
+    let sum = _.sum(widths)
+    let defWidth = Math.floor((COL_LIMIT - sum) / unset)
+    let firstWidth = defWidth + (COL_LIMIT % unset)
+    _.forEach(widths, (width, i) => {
+      if (!width) {
+        if (!filledFirst) {
+          widths[i] = firstWidth
+        } else {
+          widths[i] = defWidth
+        }
       }
-    }
-  })
+    })
+  }
+  return widths
+}
+
+export function isTextType (type) {
+  return _.includes(TEXT_TYPES, type)
 }
 
 export default {
-  syncModelProps,
+  colWidths,
   mergeClassObj,
-  splitConfig,
-  createVueElement
+  createVueElement,
+  isTextType
 }

@@ -11,25 +11,31 @@
               </span>
 
               <!-- TEXT -->
-              <input v-if="col.type === 'text' || col.type ==='input'"
-                v-model="value[col.model]"
-                type="text" class="form-control" style="width:100%"
-                :placeholder="col.placeholder" :style="col.style" :class="col.class"
-                @keyup="eventHandler('onkeyup', $event, col)"
-                @keydown="eventHandler('onkeydown', $event, col)"
-                @blur="eventHandler('onblur', $event, col)"
-                @focus="eventHandler('onfocus', $event, col)"
-                @change="eventHandler('onchange', $event, col)">
+              <div v-if="isTextType(col.type)" :class="{ 'input-group': col.iconPrefix || col.textPrefix }">
+                <div v-if="col.iconPrefix || col.textPrefix" class="input-group-addon">
+                  <i v-if="col.iconPrefix && !col.textPrefix" :class="col.iconPrefix"></i>
+                  <span v-if="col.textPrefix">{{col.textPrefix}}</span>
+                </div>
+                <input v-if="col.type === 'text' || col.type ==='input'"
+                       v-model="value[col.model]"
+                       type="text" class="form-control" style="width:100%"
+                       :placeholder="col.placeholder" :style="col.style" :class="col.class"
+                       @keyup="eventHandler('onkeyup', $event, col)"
+                       @keydown="eventHandler('onkeydown', $event, col)"
+                       @blur="eventHandler('onblur', $event, col)"
+                       @focus="eventHandler('onfocus', $event, col)"
+                       @change="eventHandler('onchange', $event, col)">
 
-              <input v-if="col.type === 'password'"
-                v-model="value[col.model]"
-                type="password" class="form-control" style="width:100%"
-                :placeholder="col.placeholder" :style="col.style" :class="col.class"
-                @keyup="eventHandler('onkeyup', $event, col)"
-                @keydown="eventHandler('onkeydown', $event, col)"
-                @blur="eventHandler('onblur', $event, col)"
-                @focus="eventHandler('onfocus', $event, col)"
-                @change="eventHandler('onchange', $event, col)">
+                <input v-if="col.type === 'password'"
+                       v-model="value[col.model]"
+                       type="password" class="form-control" style="width:100%"
+                       :placeholder="col.placeholder" :style="col.style" :class="col.class"
+                       @keyup="eventHandler('onkeyup', $event, col)"
+                       @keydown="eventHandler('onkeydown', $event, col)"
+                       @blur="eventHandler('onblur', $event, col)"
+                       @focus="eventHandler('onfocus', $event, col)"
+                       @change="eventHandler('onchange', $event, col)">
+              </div>
             </label>
           </div>
         </div>
@@ -40,7 +46,7 @@
 
 <script type="text/babel">
   import _ from 'lodash'
-
+  import { colWidths, isTextType } from '../common'
   const COL_LIMIT = 12
 
   export default {
@@ -59,7 +65,7 @@
       },
       colClass () {
         return _.map(this.config.rows, (row, rIdx) => {
-          return _.map(this.colWidths(row.columns), (col) => {
+          return _.map(colWidths(row.columns, COL_LIMIT), (col) => {
             let clazz = [
               `col-xs-${col}`,
               `col-sm-${col}`,
@@ -72,41 +78,11 @@
       }
     },
     methods: {
+      isTextType,
       eventHandler (type, event, col) {
         if (!_.isFunction(_.get(col, type))) return null
         let data = _.get(this.value, _.get(col, 'model'), null)
         return col[type](event, data, this.data)
-      },
-      colWidths (columns) {
-        let filledFirst = false
-        let unset = 0
-        let runningCount = 0
-        let widths = _.map(columns, (col, idx) => {
-          let remaining = (columns.length - (idx + 1))
-          if (_.isNumber(col.colspan)) {
-            let currentWidth = ((col.colspan + runningCount + remaining) > COL_LIMIT) ? 1 : col.colspan
-            runningCount += currentWidth
-            return currentWidth
-          }
-          unset++
-          return 0
-        })
-
-        if (unset) {
-          let sum = _.sum(widths)
-          let defWidth = Math.floor((COL_LIMIT - sum) / unset)
-          let firstWidth = defWidth + (COL_LIMIT % unset)
-          _.forEach(widths, (width, i) => {
-            if (!width) {
-              if (!filledFirst) {
-                widths[i] = firstWidth
-              } else {
-                widths[i] = defWidth
-              }
-            }
-          })
-        }
-        return widths
       }
     }
   }
