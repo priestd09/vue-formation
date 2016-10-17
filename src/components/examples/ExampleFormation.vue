@@ -3,48 +3,35 @@
     br
     br
     formation(v-model="formData", :config='formConfig', :framework='framework')
-    br
-    br
-    button.btn.btn-primary.fa.fa-plus(@click='addForm')
-    button.btn.btn-danger.fa.fa-minus(@click='delForm')
-    button.btn.btn-success
-      i
-        | G
     pre {{formData}}
 </template>
 
 <script type="text/babel">
   // import Vue from 'vue'
-  import _ from 'lodash'
-  import Formation from './formation/Formation'
-  import { vueSet } from '../common/util'
+  // import _ from 'lodash'
+  import Formation from '../formation/Formation'
+  // import { vueSet } from '../../common/util'
   export default {
     props: ['framework'],
     components: {
       Formation
     },
-    methods: {
-      addForm () {
-        this.counter++
-        vueSet(this.formConfig.forms, `form${this.counter}`, {
-          type: 'input',
-          model: `loc.fdata${this.counter}`
-        })
-      },
-      delForm () {
-        /*
-         let key = _.last(_.keys(this.formConfig.forms))
-         Vue.set(this.formConfig.forms, key, undefined)
-         delete this.formConfig.forms[key]
-         */
-        // clear and reconfig forms, otherwise forms withthe same name will remain
-        this.formConfig.forms = {}
-        this.$nextTick(() => {
-          this.formConfig.forms = _.cloneDeep(this.formConfig2.forms)
-        })
-      }
-    },
     data () {
+      let pfxIcon = null
+      switch (this.framework) {
+        case 'bootstrap':
+          pfxIcon = 'glyphicon glyphicon-user'
+          break
+        case 'materialize':
+          pfxIcon = 'account_circle'
+          break
+        case 'semanticui':
+          pfxIcon = 'user'
+          break
+        default:
+          break
+      }
+
       return {
         counter: 2,
         formData: {
@@ -64,6 +51,7 @@
                 {
                   columns: [
                     {
+                      iconPrefix: pfxIcon,
                       type: 'text',
                       label: 'input1',
                       colspan: 2,
@@ -79,6 +67,7 @@
                       model: 'loc.name'
                     },
                     {
+                      textPrefix: 'OK',
                       type: 'password',
                       label: 'password',
                       model: 'password'
@@ -87,6 +76,7 @@
                 }
               ]
             },
+            /*
             {
               type: 'container',
               config: {},
@@ -96,6 +86,7 @@
                 }
               ]
             },
+            */
             {
               type: 'container',
               components: [

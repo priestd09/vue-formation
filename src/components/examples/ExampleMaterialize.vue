@@ -11,11 +11,6 @@
     components: {
       ExampleFormation
     },
-    methods: {
-      goBootstrap () {
-        this.$router.go({ path: '/bootstrap' })
-      }
-    },
     mounted () {
       $('#style-framework').attr('href', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css')
     }

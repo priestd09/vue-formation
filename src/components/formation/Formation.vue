@@ -1,8 +1,17 @@
 <script type="text/babel">
   import _ from 'lodash'
   import Bootstrap from './bootstrap/index'
+  import Foundation from './foundation/index'
   import Materialize from './materialize/index'
+  import SemanticUI from './semantic-ui/index'
   import { vueSet } from '../../common/util'
+
+  const FRAMEWORKS = [
+    'bootstrap',
+    'foundation',
+    'materialize',
+    'semanticui'
+  ]
 
   export default {
     props: {
@@ -18,7 +27,7 @@
         type: String,
         default: 'bootstrap',
         validator (value) {
-          return _.includes(['bootstrap', 'materialize'], value)
+          return _.includes(FRAMEWORKS, value)
         }
       }
     },
@@ -64,7 +73,9 @@
       return {
         frameworks: {
           bootstrap: Bootstrap,
-          materialize: Materialize
+          foundation: Foundation,
+          materialize: Materialize,
+          semanticui: SemanticUI
         },
         formData: {}
       }
