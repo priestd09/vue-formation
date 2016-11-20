@@ -1,18 +1,22 @@
 <template lang="jade">
-  div
-    h2 Bootstrap
-    example-formation(framework='bootstrap')
+  <div>
+    formation(:value.sync='formData', :config='formConfig')
+  </div>
 </template>
 
-<script type="text/babel">
-  import $ from 'jquery'
-  import ExampleFormation from './ExampleFormation'
+<script>
+  import Formation from '../formation/Formation'
   export default {
-    components: {
-      ExampleFormation
-    },
-    mounted () {
-      $('#style-framework').attr('href', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    data () {
+      return {
+        formData: {
+          name: 'Jon',
+          loc: {
+            id: '2'
+          }
+        },
+        formConfig: {}
+      }
     }
   }
 </script>

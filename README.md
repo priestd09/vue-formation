@@ -1,6 +1,6 @@
 # vue-formation
 
-> A Vue.js layout builder
+> A Vue.js Layout Builder
 
 ## Build Setup
 
